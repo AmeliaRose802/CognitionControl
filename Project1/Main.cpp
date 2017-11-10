@@ -7,10 +7,11 @@ int main() {
 	const int CODE_LENGTH = 4;
 	const int NUM_OPTIONS = 6;
 	int code[CODE_LENGTH];
-
+	int guess[CODE_LENGTH];
 	genrateCode(code, CODE_LENGTH, NUM_OPTIONS);
 	printArray(code, CODE_LENGTH);
 
+	
 	//Define varibles that remain throughout turn 
 
 
@@ -18,7 +19,7 @@ int main() {
 
 	//
 
-
+	cout << endl;
 	system("pause");
 }
 

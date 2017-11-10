@@ -5,21 +5,27 @@
 #include <time.h> 
 using namespace std;
 
-void genrateCode( int code[], int codeLength, int numOfOptions) 
+void genrateCode( int answer[], int codeLength, int numOfOptions) 
 {
 	srand(time(NULL));
 
 	for (int i = 0; i < codeLength; i++) 
 	{
-		code[i] = (rand() % numOfOptions)+1;
+		answer[i] = (rand() % numOfOptions)+1;
 	}
 
 }
 
-void printArray(int code[], int codeLength) 
+void printArray(int answer[], int codeLength) 
 {
 	for (int i = 0; i < codeLength; i++) 
 	{
-		cout <<  code[i] << " ";
+		cout <<  answer[i] << " ";
+	}
+}
+
+void getGuess(int guess[], int codeLength) {
+	for (int i = 0; i < codeLength; i++) {
+		cin >> guess[i];
 	}
 }
