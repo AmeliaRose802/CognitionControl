@@ -21,9 +21,15 @@
     <ClCompile Include="Amelia_Functions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="William%27s scource.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Amelia_Header.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Will_Header.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
