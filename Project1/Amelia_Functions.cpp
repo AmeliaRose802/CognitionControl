@@ -4,6 +4,8 @@
 #include <stdlib.h>     
 #include <time.h> 
 #include <Windows.h>
+#include "Amelia_Header.h"
+#include "Will_Header.h"
 using namespace std;
 
 /*
@@ -66,28 +68,46 @@ void getGuess(int guess[], int codeLength) {
 		cin >> guess[i];
 	}
 }
-
+/*
 int checkRightNumWrongSpot(int answer[], int guess[], const int codeLength) {
-	int checkGuess[codeLength];
-	int checkAnswer[codeLength];
-	int rightNum = 0;
-	for (int i = 0; i < codeLength; i++) {
-		for (int j = 0; j < codeLength; j++)
-		{
+	int checkGuess[100];
+	int checkAnswer[100];
 
-			cout << "j = " << j << " i = " << i << " answer[i] = " << answer[i] << "guess[j] = " << guess[j] << endl;
-			if ((answer[i] == guess[j]) && (i != j))
+
+
+	copyArray(checkAnswer, answer, codeLength);
+	copyArray(checkGuess, guess, codeLength);
+	int ws = 0;
+	int rs = 0;
+	cout << endl;
+	for (int i = 0; i < codeLength; i++) {
+		cout << "\nNew code digit being tested\n\n";
+
+		for (int j = 0; j < codeLength; j++) {
+			cout << "answer["<< i<<"]  = " << checkAnswer[i] << " guess["<< j <<"] = " << checkGuess[j] << endl;
+			if ((checkAnswer[i] == checkGuess[j]) && (i != j ))
 			{
-				cout << "Another right number in the wrong spot" << endl;
-				cout << "rightNum = " << rightNum << endl;
-				rightNum++;
+				cout << "Right num wrong spot \n";
+				ws++;
+				checkAnswer[j] = -1;
+				cout << checkGuess[j];
+			}
+			if (checkAnswer[i] == checkGuess[j] && (i == j))
+			{
+				checkAnswer[j] = -1;
+				cout << "Right Num Right Spot \n";
+				rs++;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
 			}
 		}
-	}
 
-	cout << "Right Numbers Wrong spot: " << rightNum;
-	return (rightNum/2);
-}
+	}
+	cout << "Right Num wrong spot " << ws << " Right number right spot " << rs << endl;
+
+	return 0;
+}*/
+
+
+
 void copyArray(int newArray[], int oldArray[], int codeLength) {
 	for (int i = 0; i < codeLength; i++) {
 		newArray[i] = oldArray[i];

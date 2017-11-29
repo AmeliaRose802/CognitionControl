@@ -1,3 +1,2 @@
 #pragma once
-/*int checkSpot(int guess[], int answer[]);*/
-; int checkNum(int guess[], int answer[]);
+bool checkSpot(int guess[], int answer[], const int CODE_LENGTH);

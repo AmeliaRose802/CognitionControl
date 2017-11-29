@@ -5,51 +5,76 @@
 #include<ctime>
 #include<string>
 #include<vector>
+#include "Amelia_Header.h"
 #include "Will_Header.h"
+
 using namespace std;
 
 
 
-int checkNum(int guess[], int answer[])
+bool checkSpot(int guess[], int answer[], const int CODE_LENGTH)
 {
-	/*
-	int saveGuess[] = {guess[0], guess[1], guess[2], guess[3]};
-	int saveAnswer[] = {answer[0], answer[1], answer[2], answer[3]};
-	for (int i = 0; i < 4; i++)
-	{
-		for (int j = 0; j < 4; j++)
-		{
-			if ((guess[i] == answer[j]) && (i != j))
-			{
-				cout << "Another right number in the wrong spot" << endl;
-				guess[i] = -1;
-				answer[j] = -1;
-			}
-		}
-	}
-	guess = {saveGuess[0], saveGuess[1], saveGuess[2], saveGuess[3]};
-	answer = { saveAnswer[0], saveAnswer[1], saveAnswer[2], saveAnswer[3] };
-}
+	//Set up temp arrays
+	int tempGuess[100];
+	int tempAnswer[100];
 
-int checkSpot(int guess[], int answer[])
-{
-	int saveGuess[] = { guess[0], guess[1], guess[2], guess[3] };
-	int saveAnswer[] = { answer[0], answer[1], answer[2], answer[3] };
-	for (int i = 0; i < 4; i++)
+	//Set up counter vars
+	int rightNum = 0;
+	int rnWrongSpot = 0;
+
+	bool hasWon = false;
+
+	//Cody the arrays
+	copyArray(tempGuess, guess, CODE_LENGTH);
+	copyArray(tempAnswer, answer, CODE_LENGTH);
+
+
+	//Get right numbers
+	for (int i = 0; i < CODE_LENGTH; i++) 
 	{
-		for (int j = 0; j < 4; j++)
+		for (int j = 0; j < CODE_LENGTH; j++)
 		{
-			if ((guess[i] == answer[j]) && (i == j))
+			if ((tempGuess[(i)] == tempAnswer[(j)]) && ((i) == (j)))
 			{
-				cout << "Another right number in the right spot" << endl;
-				guess[i] = -1;
-				answer[j] = -1;
+
+				//tempGuess[i] = guess[i];
+				rightNum++;
+
+				//Set the index to impossible values so nums cant be counted twice
+				tempGuess[i] = -1;
+				tempAnswer[j] = -2;
 			}
+
 		}
 	}
 
-	guess = { saveGuess[0], saveGuess[1], saveGuess[2], saveGuess[3] };
-	answer = { saveAnswer[0], saveAnswer[1], saveAnswer[2], saveAnswer[3] };
-	*/
-	return 0;
+	//Reset the guess
+	copyArray(tempGuess, guess, CODE_LENGTH);
+
+	//gets right num wrong spot
+	for (int i = 0; i < CODE_LENGTH; i++)
+	{
+		for (int j = 0; j < CODE_LENGTH; j++)
+		{
+
+			if ((tempGuess[(i)] == tempAnswer[(j)]) && ((i) != (j)))
+			{
+				//tempAnswer[j] = answer[j];
+				rnWrongSpot++;
+				tempGuess[i] = -1;
+				tempAnswer[j] = -2;
+			}
+
+		}
+	}
+	if (rightNum >= CODE_LENGTH) 
+	{
+		hasWon = true;
+	}
+	else 
+	{
+		cout << "                      Right Num Wrong Spot:  " << rnWrongSpot << " Right Num Right Spot " << rightNum;
+	}
+	return hasWon;
 }
+
