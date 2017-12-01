@@ -1,4 +1,3 @@
-﻿  Amelia_Functions.cpp
-h:\cognitioncontrol\project1\amelia_functions.cpp(20): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+﻿  Main.cpp
   Project1.vcxproj -> H:\CognitionControl\Debug\Project1.exe
   Project1.vcxproj -> H:\CognitionControl\Debug\Project1.pdb (Partial PDB)
