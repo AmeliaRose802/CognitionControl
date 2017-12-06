@@ -21,7 +21,7 @@ bool checkSpot(int guess[], int answer[], const int CODE_LENGTH)
 	//Set up counter vars
 	int rightNum = 0;
 	int rnWrongSpot = 0;
-
+	int matches = 0;
 	bool hasWon = false;
 
 	//Cody the arrays
@@ -29,44 +29,40 @@ bool checkSpot(int guess[], int answer[], const int CODE_LENGTH)
 	copyArray(tempAnswer, answer, CODE_LENGTH);
 
 
-	//Get right numbers
+	//Get all matches
 	for (int i = 0; i < CODE_LENGTH; i++) 
 	{
 		for (int j = 0; j < CODE_LENGTH; j++)
 		{
-			if ((tempGuess[(i)] == tempAnswer[(j)]) && ((i) == (j)))
+			if (tempAnswer[i] == tempGuess[j])
 			{
-
-				//tempGuess[i] = guess[i];
-				rightNum++;
+				matches++;
 
 				//Set the index to impossible values so nums cant be counted twice
-				tempGuess[i] = -1;
-				tempAnswer[j] = -2;
+				tempAnswer[j] = -1;
+				tempGuess[i] = -2;
+
 			}
 
 		}
 	}
 
-	//Reset the guess
+	//Reset the arrays
 	copyArray(tempGuess, guess, CODE_LENGTH);
+	copyArray(tempAnswer, answer, CODE_LENGTH);
 
-	//gets right num wrong spot
-	for (int i = 0; i < CODE_LENGTH; i++)
+	//gets right num right spot
+	for (int k = 0; k < CODE_LENGTH; k++)
 	{
-		for (int j = 0; j < CODE_LENGTH; j++)
+		if (tempAnswer[k] == tempGuess[k]) 
 		{
-
-			if ((tempGuess[(i)] == tempAnswer[(j)]) && ((i) != (j)))
-			{
-				//tempAnswer[j] = answer[j];
-				rnWrongSpot++;
-				tempGuess[i] = -1;
-				tempAnswer[j] = -2;
-			}
-
+			rightNum++;
 		}
 	}
+
+	//Calculate how many are in wrong spot by subtracting the number in the right spot from the total number of matches
+	rnWrongSpot = matches - rightNum;
+
 	if (rightNum >= CODE_LENGTH) 
 	{
 		hasWon = true;

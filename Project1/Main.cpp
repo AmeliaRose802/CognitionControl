@@ -5,6 +5,8 @@
 #include "Amelia_Header.h"
 #include "Will_Header.h"
 #include <fstream>
+#include <stdio.h>
+#include <ctype.h>
 using namespace std;
 
 
@@ -26,7 +28,8 @@ Force good inputs at all points
 
 
 int main() {
-
+	system("Color 0A");
+	//4A red and nastsy
 	//Define varibles that remain throughout game 
 	int userId;
 	string fileName = "accounts.txt";
@@ -46,11 +49,10 @@ int main() {
 	char hasAccount;
 	cout << "Do you have an account (Y, N): ";
 	cin >> hasAccount;
-	toupper(hasAccount);
-
+	hasAccount = toupper(hasAccount);
 	if (hasAccount == 'Y') {
 		//if so get the ID number
-		cout << "For security we refer to users only by their 0 indexed intiger id number.";
+		cout << "For security we refer to users only by their 0 indexed intiger id number. \n";
 		cout << "What is your ID number: ";
 		cin >> userId;
 

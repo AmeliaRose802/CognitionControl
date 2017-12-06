@@ -20,7 +20,7 @@ void printWinScreen();
 void memberMenu(int id, struct player accounts[], string fileName, int numAccounts);
 void modifyAccount(struct player accounts[], int id, string fileName, int numAccounts);
 void makeDeposit(struct player accounts[], int id);
-double playGame(int codeLength, int numOptions, int rounds, int bet, int id, struct player accounts[]);
+double playGame(int bet, int id, struct player accounts[]);
 void breakKneeCaps();
 void setAvgScore(int id, double newScore, struct player accounts[]);
 

@@ -8,6 +8,8 @@
 #include "Amelia_Header.h"
 #include "Will_Header.h"
 #include <fstream>
+#include <stdio.h>
+#include <ctype.h>
 using namespace std;
 
 /*
@@ -71,6 +73,7 @@ void copyArray(int newArray[], int oldArray[], int codeLength)
 
 void printLogo() 
 {
+
 	cout << "   _____                  _ _   _              _____            _             _ " << endl;
 	cout << "  / ____|                (_) | (_)            / ____|          | |           | |" << endl;
 	cout << " | |     ___   __ _ _ __  _| |_ _  ___  _ __ | |     ___  _ __ | |_ _ __ ___ | |" << endl;
@@ -102,7 +105,6 @@ This function takes a length and options and calculates how many codes are possi
 double calcPermutations(int codeLength, int codeOptions) 
 {
 	double prob = (double)pow(codeOptions, codeLength);
-	cout << prob;
 	return prob;
 }
 
@@ -111,7 +113,11 @@ Calculates odds of winning if you guessed randomly. Dependednt on calcPermutatio
 */
 double calcChances(int codeLength, int codeOptions, int numRows) 
 {
-	return ((1 / calcPermutations(codeLength, codeOptions) ) *numRows);
+	double chances = ((1 / calcPermutations(codeLength, codeOptions) ) *numRows);
+	if (chances > 1) {
+		chances = 1;
+	}
+	return chances;
 }
 
 /*
@@ -120,7 +126,7 @@ Calculates a payout based on odds of not winning and bet. Devides that by ten so
 double calcReward(int codeLength, int codeOptions, int numRows, double bet) 
 {
 	//Calcuates a payout based on the chances of failure and an arbatary modifier to make payout less
-	double payOut = bet + ((1 - calcChances(codeLength, codeOptions, numRows))*bet / 10);
+	double payOut = ((1 - calcChances(codeLength, codeOptions, numRows))*bet / 10);
 	return payOut;
 }
 
@@ -129,7 +135,7 @@ Calcualtes your score. Drectly proportional to codeLength and codeOptions, inver
 */
 double calcScore(int codeLength, int codeOptions, int rowsNeeded) 
 {
-	return ((codeLength * codeOptions) / rowsNeeded);
+	return (((codeLength * codeOptions) / rowsNeeded)*100);
 }
 /*
 Update the avgrage score
@@ -297,6 +303,7 @@ Modify the game stats of an account. Lets user change their saved codeLength and
 */
 void modifyAccount(struct player accounts[], int id, string fileName, int numAccounts) 
 {
+
 		//Get code length
 		cout << "How long would you like your new deafult code to be: (max is " << MAX_CODE_LENGTH << "): ";
 		cin >> accounts[id].defaultCodelength;
@@ -313,7 +320,7 @@ void modifyAccount(struct player accounts[], int id, string fileName, int numAcc
 		char toWipe;
 		cout << "Would you like to wipe out your score history (Y or N): ";
 		cin >> toWipe;
-		toupper(toWipe);
+		toWipe = toupper(toWipe);
 
 		if (toWipe == 'Y') 
 		{
@@ -331,7 +338,7 @@ void modifyAccount(struct player accounts[], int id, string fileName, int numAcc
 Make a deposit in the account. Hypethically charges deposit amount to credit card on record
 */
 void makeDeposit(struct player accounts[], int id) {
-	cout << "Your current account balance is $" << accounts[id].balance;
+	cout << "Your current account balance is $" << accounts[id].balance << endl;
 	int deposit;
 	cout << "How much would you like to deposit: ";
 	cin >> deposit;
@@ -345,6 +352,7 @@ This is not a bug, it is a consquence. If the user gets too in debt to the house
 */
 void breakKneeCaps() 
 {
+	system("Color 4C");
 	while (true) 
 	{
 		cout << "Breaking KneeCaps ";
@@ -389,7 +397,7 @@ This is the main game menu. It is where players spend most of their time. It cal
 */
 void memberMenu(int id, struct player accounts[], string fileName, int numAccounts) 
 {
-	
+	system("Color 0A");
 
 	char selection;
 
@@ -408,7 +416,7 @@ void memberMenu(int id, struct player accounts[], string fileName, int numAccoun
 	cout << "Exit program        (E)\n";
 	cout << "Make selection: ";
 	cin >> selection; 
-	toupper(selection);
+	selection = toupper(selection);
 
 	//Clear the screen and print logo before printing selection data. This provides smoother experince. 
 	system("CLS");
@@ -438,10 +446,10 @@ void memberMenu(int id, struct player accounts[], string fileName, int numAccoun
 			system("CLS");
 			
 			//Start the game. This one returns winnings which can be a positive or negitive number to represent winnings or losses
-			int winnings = playGame(accounts[id].defaultCodelength, accounts[id].defaultNumOptions, accounts[id].defaultRows,bet, id, accounts);
-
+			double winnings = playGame(bet, id, accounts);
 			//Modify balance by winnings
 			accounts[id].balance += winnings;
+			system("Color 0A");
 			break;
 	}
 	system("pause");
@@ -458,42 +466,45 @@ void memberMenu(int id, struct player accounts[], string fileName, int numAccoun
 /*
 The game itself. This function calls other functions and manages the game loop. It returns the winnings or losses
 */
-double playGame(int codeLength, int numOptions, int rounds, int bet, int id, struct player accounts[])
+double playGame(int bet, int id, struct player accounts[])
 {
+	
+	printLogo();
+	system("Color 1A");
 	int code[MAX_CODE_LENGTH];
 	int guess[MAX_CODE_LENGTH];
 	bool hasWon = false;
 	double winnings;
 
 	//Calculate a reward if player wins
-	double reward = calcReward(codeLength, numOptions, rounds, bet);
-
-	printLogo();
+	double reward = calcReward(accounts[id].defaultCodelength, accounts[id].defaultNumOptions, accounts[id].defaultRows, bet);
+	double percentChance = calcChances(accounts[id].defaultCodelength, accounts[id].defaultNumOptions, accounts[id].defaultRows) * 100;
+	
 
 	//Genrate correct code 
-	genrateCode(code, codeLength, numOptions);
+	genrateCode(code, accounts[id].defaultCodelength, accounts[id].defaultNumOptions);
 
 	//Print out instuructions 
 	cout << "Instructions: \n";
-	cout << "1. Enter " << codeLength << " numbers after the prompt \n";
-	cout << "2. The input must be whole numbers in the range 1 to " << numOptions << "\n";
+	cout << "1. Enter " << accounts[id].defaultCodelength << " numbers after the prompt seprated by spaces\n";
+	cout << "2. The input must be whole numbers in the range 1 to " << accounts[id].defaultNumOptions << "\n";
 	cout << "3. Do not enter strings or anything else into the prompt \n";
-	cout << "4. Your odds if you guessed randomly are: " << calcChances(codeLength, numOptions, rounds) << "\n";
-	cout << "5. Your payout is: $" << reward;
+	cout << "4. Your odds if you guessed randomly are: " << percentChance << "% \n";
+	cout << "5. Your payout is: $" << (bet + reward) << "\n\n"; //show payout as origonal bet plus reward so it seems bigger
 	
 
 	//Start game loop
 	int i = 0;
-	while (i<rounds && !hasWon) //Exit when counter is greater then num of rounds, quit value is entered, or player has won 
+	while (i<accounts[id].defaultRows && !hasWon) //Exit when counter is greater then num of rounds, quit value is entered, or player has won 
 	{ 
 		cout << "\n" << (i+1)<< ".  ";  //Print prompt 
-		getGuess(guess, codeLength); //Read in user guess
-		hasWon = checkSpot(guess, code, codeLength); // Check if code was corrent. Also prints feedback
+		getGuess(guess, accounts[id].defaultCodelength); //Read in user guess
+		hasWon = checkSpot(guess, code, accounts[id].defaultCodelength); // Check if code was corrent. Also prints feedback
 		i++;
 	} //END OF GAME LOOP
 
 	accounts[id].numGames++;
-	double score = calcScore(codeLength, numOptions, i);
+	double score = calcScore(accounts[id].defaultCodelength, accounts[id].defaultNumOptions, i);
 	setAvgScore(id, score, accounts);
 
 	//Check if win condition was met
@@ -502,18 +513,20 @@ double playGame(int codeLength, int numOptions, int rounds, int bet, int id, str
 		//If player has won then set winnings to reward
 		system("CLS");
 		printWinScreen();
-		cout << "You won " << reward;
 		winnings = reward;
-		cout << "Your score was " << score;
+
+
+		cout << "\nYou won " << (reward+bet) << endl;
+		cout << "Your score was " << score << endl;
 		
 	}
 	else {
-		cout << "Your code was ";
-		printArray(code, codeLength);
-		cout << "You lost " << bet << endl;
+		cout << "\nYour code was ";
+		printArray(code, accounts[id].defaultCodelength);
+		cout << "\nYou lost " << bet << endl;
 
 		winnings = -bet;
 	}
-
+	
 	return winnings;
 }
